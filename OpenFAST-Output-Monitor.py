@@ -187,20 +187,19 @@ def plot_multiple_groups(*all_plot_groups, real_time=True, interval=100):
 
             else:
                 # Static plotting implementation
-                time_vals = np.arange(
-                    simulation_time_range[0], 
-                    simulation_time_range[1] + simulation_time_step, 
-                    simulation_time_step
-                )[:len(data)]
+                time_vals = data["Time"]
 
                 for ax, (group_name, (cols, scales)) in zip(axes, group_items):
                     ax.set_xlim(simulation_time_range)
                     ax.set_title(group_name)
                     ax.grid(True)
+
                     for col, scale in zip(cols, scales):
                         if col in data.columns:
                             unit = f" {units.get(col, '-')}" if col in units else ""
                             ax.plot(time_vals, data[col] * scale, label=f"{col}{unit} ({scale})")
+                        else:
+                            print(f"Warning: column '{col}' not found in output file.")
                     ax.legend(loc="upper left", bbox_to_anchor=(1, 1))
                     ax.set_xlabel("Time (s)")
                     ax.set_ylabel("Scaled Values")
