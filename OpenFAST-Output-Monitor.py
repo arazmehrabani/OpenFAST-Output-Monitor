@@ -44,16 +44,16 @@ def load_data():
     data = pd.read_csv(file_path, sep='\s+', skiprows=data_start_line+2, header=None, names=columns)
     data = data.apply(pd.to_numeric, errors='coerce')
     
-    # Filter data based on time column (if it exists) and the defined time steps
-    time_column = 'Time'  # Adjust this to match your time column's name
-    if time_column in data.columns:
-        # Create an array of time values (adjust for your time steps)
-        time_vals = np.arange(simulation_time_range[0], simulation_time_range[1] + simulation_time_step, simulation_time_step)
-        # Filter the data to only include rows with time within the desired range and step
-        data = data[data[time_column].isin(time_vals)]  # Adjust as necessary for time alignment
-        
-    return data.dropna(), dict(zip(columns, units))
+    # defined time steps
+    time_column = "Time"
 
+    if time_column in data.columns:
+        data = data[
+            (data[time_column] >= simulation_time_range[0]) &
+            (data[time_column] <= simulation_time_range[1])
+        ].copy()
+
+    return data.dropna(subset=["Time"]), dict(zip(columns, units))
 
 # Define separate plot group dictionaries
 plot_groups_1 = {
