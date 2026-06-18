@@ -37,11 +37,11 @@ def wait_for_file(file_path, check_interval=1):
 def load_data():
     wait_for_file(file_path)
     # Read column names
-    columns = pd.read_csv(file_path, sep='\s+', skiprows=data_start_line, nrows=0).columns.tolist()
+    columns = pd.read_csv(file_path, sep=r"\s+", skiprows=data_start_line, nrows=0).columns.tolist()
     # Read units row
-    units = pd.read_csv(file_path, sep='\s+', skiprows=data_start_line+1, nrows=1, header=None).iloc[0].tolist()
+    units = pd.read_csv(file_path, sep=r"\s+", skiprows=data_start_line+1, nrows=1, header=None).iloc[0].tolist()
     # Read data, skipping the units row
-    data = pd.read_csv(file_path, sep='\s+', skiprows=data_start_line+2, header=None, names=columns)
+    data = pd.read_csv(file_path, sep=r"\s+", skiprows=data_start_line+2, header=None, names=columns)
     data = data.apply(pd.to_numeric, errors='coerce')
     
     # defined time steps
